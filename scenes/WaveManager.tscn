@@ -1,0 +1,9 @@
+[gd_scene load_steps=3 format=3 uid="uid://bbmk3ecut8ba"]
+
+[ext_resource type="Script" path="res://script/game_manager.gd" id="1_7cmpm"]
+
+[sub_resource type="PackedScene" id="PackedScene_bx3i0"]
+
+[node name="WaveManager" type="Node"]
+script = ExtResource("1_7cmpm")
+enemy_scene = SubResource("PackedScene_bx3i0")
