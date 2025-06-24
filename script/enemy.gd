@@ -9,7 +9,7 @@ signal monster_clicked(monster_instance)
 # Nossa variável de estado. Começa como 'true' para que ele possa atacar assim que nascer.
 var can_attack = true
 
-@export var speed = 75.0
+@export var speed = 15.0
 @export var answer_value = 0 
 
 @onready var answer_label: Label = $AnswerLabel
@@ -53,14 +53,12 @@ func _physics_process(delta):
 					velocity = -direction * speed * 2 # Joga para trás com o dobro da velocidade
 					move_and_slide() # Aplica o movimento de recuo
 					
-					print("Inimigo atacou! Entrando em cooldown...")
 					break
 					
 # ESTA FUNÇÃO É CHAMADA QUANDO O TIMER TERMINA
 func _on_attack_cooldown_timer_timeout():
 	 # O tempo de recarga acabou. Volta para o estado "PODE ATACAR"
 	can_attack = true
-	print("Cooldown do inimigo terminou. Pronto para atacar!")
 	
 func set_answer(value: int):
 	answer_value = value
@@ -72,6 +70,7 @@ func _on_click_area_input_event(viewport, event, shape_idx):
 
 func take_damage(amount: int):
 	# Esta função é chamada quando o JOGADOR ataca o inimigo
+	print(amount," projetil")
 	queue_free()
 
 func apply_penalty_speed_boost():

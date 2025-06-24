@@ -3,7 +3,7 @@
 [ext_resource type="PackedScene" uid="uid://dail6vphdmcnj" path="res://scenes/player.tscn" id="1_duvbp"]
 [ext_resource type="Script" path="res://script/world.gd" id="1_qack8"]
 [ext_resource type="Script" path="res://script/ui.gd" id="2_ta41c"]
-[ext_resource type="Texture2D" uid="uid://d1gqbpxla25qx" path="res://icon.svg" id="3_ee20q"]
+[ext_resource type="Texture2D" uid="uid://cuco2qhi1ltv3" path="res://assets/objects/Sem nome (60 x 40 px).png" id="3_dwoet"]
 [ext_resource type="PackedScene" uid="uid://bbmk3ecut8ba" path="res://scenes/WaveManager.tscn" id="3_ksm5r"]
 [ext_resource type="PackedScene" uid="uid://b47yrtlquuv0l" path="res://scenes/enemy.tscn" id="4_ua8pv"]
 [ext_resource type="Texture2D" uid="uid://dgntji2nafmn5" path="res://assets/tilesets/plains.png" id="7_xu10e"]
@@ -122,7 +122,7 @@ texture = ExtResource("7_xu10e")
 [sub_resource type="TileSet" id="TileSet_sbi0u"]
 sources/1 = SubResource("TileSetAtlasSource_55aua")
 
-[node name="world" type="Node2D" groups=["player"]]
+[node name="world" type="Node2D" groups=["enemies", "player"]]
 script = ExtResource("1_qack8")
 AnswerChoiceScene = SubResource("PackedScene_xouft")
 
@@ -138,12 +138,12 @@ anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
 
-[node name="QuestionLabel" type="Label" parent="CanvasLayer/Control"]
+[node name="QuestionLabel" type="Label" parent="CanvasLayer/Control" groups=["player"]]
 layout_mode = 0
-offset_left = 1028.0
-offset_top = 45.0
-offset_right = 1059.0
-offset_bottom = 68.0
+offset_left = 274.0
+offset_top = 12.0
+offset_right = 305.0
+offset_bottom = 35.0
 text = "text"
 
 [node name="GameOverScreen" type="Panel" parent="CanvasLayer"]
@@ -179,18 +179,18 @@ grow_vertical = 2
 text = "Jogar Novamente"
 
 [node name="HealthBar" type="TextureProgressBar" parent="CanvasLayer"]
-offset_right = 128.0
-offset_bottom = 128.0
+offset_right = 31.0
+offset_bottom = 21.0
 value = 100.0
-texture_under = ExtResource("3_ee20q")
+texture_under = ExtResource("3_dwoet")
 
 [node name="PowerBar" type="TextureProgressBar" parent="CanvasLayer"]
-offset_left = -2.0
-offset_top = 138.0
-offset_right = 126.0
-offset_bottom = 266.0
+offset_left = -1.0
+offset_top = 49.0
+offset_right = 29.0
+offset_bottom = 71.0
 value = 50.0
-texture_under = ExtResource("3_ee20q")
+texture_under = ExtResource("3_dwoet")
 
 [node name="GameManager" parent="." node_paths=PackedStringArray("game_over_screen", "player", "question_label", "monster_container") instance=ExtResource("3_ksm5r")]
 enemy_scene = ExtResource("4_ua8pv")

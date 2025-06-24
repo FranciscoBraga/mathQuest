@@ -44,7 +44,7 @@ func start_wave(monster_count: int):
 		var angle = i * (TAU / monster_count)
 		var spawn_position = player.global_position + Vector2(cos(angle), sin(angle)) * spawn_radius
 		enemy_instance.global_position = spawn_position
-		
+		print(spawn_position)
 		# ORDEM: Soldado, me avise quando você for clicado!
 		enemy_instance.monster_clicked.connect(_on_monster_clicked)
 		

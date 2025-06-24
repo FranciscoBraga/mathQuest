@@ -22,6 +22,7 @@ MathProblem="*res://script/MathProblem.gd"
 
 window/size/viewport_width=640
 window/size/viewport_height=360
+window/size/initial_position_type=0
 window/stretch/mode="canvas_items"
 window/stretch/scale=1.5
 
