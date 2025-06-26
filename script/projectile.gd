@@ -13,7 +13,6 @@ func _on_body_entered(body):
 	# Verifica se o corpo que atingiu é um inimigo
 	if body.is_in_group("enemies"): # <-- IMPORTANTE: Adicione seus inimigos a este grupo!
 		body.take_damage(50) # Causa 
-		queue_free()
 	
 	# O projétil se destrói ao atingir qualquer coisa (exceto o jogador)
 	if not body.is_in_group("player"):

@@ -7,3 +7,4 @@
 [node name="WaveManager" type="Node"]
 script = ExtResource("1_7cmpm")
 enemy_scene = SubResource("PackedScene_bx3i0")
+spawn_radius = 200

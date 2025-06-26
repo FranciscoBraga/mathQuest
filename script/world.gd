@@ -56,13 +56,11 @@ func _on_answer_choice_made(value_chosen: int):
 			node.queue_free()
 
 	if value_chosen == correct_answer:
-		print("Resposta Correta!")
 		player.move_to(target_position)
 		# Após um tempinho, cria o próximo desafio
 		await get_tree().create_timer(1.5).timeout
 		create_movement_challenge()
 	else:
-		print("Resposta Errada!")
 		# Lógica de erro: o jogador pode tremer, perder um pouco de vida, etc.
 		await get_tree().create_timer(1.0).timeout
 		create_movement_challenge() # Tenta de novo ou gera novo problema

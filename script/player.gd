@@ -21,7 +21,8 @@ var speed = 20
 
 var last_direction = Vector2(0, 1)
 var target_position: Vector2 # Nova variável para guardar o alvo do clique
-
+func _ready():
+	pass
 # Substitua seu _physics_process inteiro por este:
 func _physics_process(delta):
 	# A lógica de movimento só roda se o estado for MOVING
@@ -55,8 +56,6 @@ func _input(event):
 func take_damage(amount: int):
 	health -= amount
 	emit_signal("health_changed", health)
-	print("Vida do jogador: ", health)
-	print("SINAL 'health_changed' EMITIDO! Nova vida: ", health)
 	if health <= 0:
 		emit_signal("died")
 		hide() # Apenas esconde o sprite do jogador
@@ -65,7 +64,6 @@ func take_damage(amount: int):
 func gain_power(amount: int):
 	current_power = min(current_power + amount, max_power) # Garante que o poder não passe do máximo
 	emit_signal("power_changed", current_power)
-	print("Poder do jogador: ", current_power)
 
 func perform_attack(target_monster: Node2D):
 	# Não permite um novo ataque se já estiver atacando

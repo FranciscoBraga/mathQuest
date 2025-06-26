@@ -9,7 +9,7 @@ radius = 11.0
 [sub_resource type="CircleShape2D" id="CircleShape2D_dopqw"]
 radius = 11.0454
 
-[node name="emeny" type="CharacterBody2D"]
+[node name="emeny" type="CharacterBody2D" groups=["enemies"]]
 script = ExtResource("1_y3h2r")
 speed = 35.0
 
