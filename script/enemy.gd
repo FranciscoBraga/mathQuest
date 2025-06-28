@@ -3,7 +3,7 @@ extends CharacterBody2D
 
 signal monster_clicked(monster_instance)
 
-@export var speed = 75.0
+@export var speed = 1.0
 @export var answer_value = 0 
 
 @onready var answer_label: Label = $AnswerLabel
@@ -61,4 +61,4 @@ func take_damage(amount: int):
 	queue_free()
 
 func apply_penalty_speed_boost():
-	speed *= 1.5
+	speed *= 0.5

@@ -52,7 +52,7 @@ tracks/0/keys = {
 
 [sub_resource type="Animation" id="Animation_kaimo"]
 resource_name = "attack_left"
-length = 0.7
+length = 0.8
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -261,7 +261,7 @@ _data = {
 "walk_up": SubResource("Animation_c0u3m")
 }
 
-[node name="player" type="CharacterBody2D" groups=["enemies"]]
+[node name="player" type="CharacterBody2D"]
 position = Vector2(320, 179)
 script = ExtResource("1_xgfj0")
 projectile_scene = ExtResource("2_ieqno")

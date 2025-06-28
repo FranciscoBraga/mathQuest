@@ -11,7 +11,7 @@ radius = 11.0454
 
 [node name="emeny" type="CharacterBody2D" groups=["enemies"]]
 script = ExtResource("1_y3h2r")
-speed = 35.0
+speed = 5.0
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture = ExtResource("2_3mqf3")
@@ -30,15 +30,13 @@ shape = SubResource("CircleShape2D_dopqw")
 debug_color = Color(0.897576, 0.0333752, 0.760669, 0.42)
 
 [node name="AnswerLabel" type="Label" parent="."]
-offset_left = -62.0
-offset_top = -26.0
-offset_right = 62.0
-offset_bottom = -3.0
+offset_left = -64.0
+offset_top = -30.0
+offset_right = 60.0
+offset_bottom = -7.0
 text = "?"
 horizontal_alignment = 1
 
 [node name="AttackCooldownTimer" type="Timer" parent="."]
 wait_time = 2.0
 one_shot = true
-
-[connection signal="timeout" from="AttackCooldownTimer" to="." method="_on_attack_cooldown_timer_timeout"]
