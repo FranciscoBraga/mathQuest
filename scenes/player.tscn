@@ -262,20 +262,23 @@ _data = {
 }
 
 [node name="player" type="CharacterBody2D"]
-position = Vector2(320, 179)
+position = Vector2(316, 171)
+scale = Vector2(1, 0.986901)
 script = ExtResource("1_xgfj0")
 projectile_scene = ExtResource("2_ieqno")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
-position = Vector2(0, -23)
+position = Vector2(0, -6.07964)
 scale = Vector2(0.945, 1)
 texture = ExtResource("2_lu7ts")
+offset = Vector2(0, -16.9204)
 hframes = 6
 vframes = 10
 frame = 25
 region_rect = Rect2(60.7223, 160.578, 22.747, 26.988)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+visible = false
 position = Vector2(1, -13)
 shape = SubResource("CapsuleShape2D_tpdek")
 

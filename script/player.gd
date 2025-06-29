@@ -6,10 +6,11 @@ enum State { IDLE, MOVING, ATTACKING }
 var current_state = State.IDLE # O jogador começa no estado "Parado"
 
 
-# Vamos usar sinais para que outros nós saibam o que aconteceu com o jogador
+#sinais 
 signal health_changed(current_health)
 signal died
 signal power_changed(current_power)
+signal movement_finished
 
 @onready var animation_player = $AnimationPlayer
 @export var projectile_scene: PackedScene
@@ -40,9 +41,10 @@ func _physics_process(delta):
 		State.MOVING:
 			# No estado MOVENDO, executamos toda a lógica de movimento point-and-click.
 			var direction = global_position.direction_to(target_position)
-			
-			# Se estivermos perto o suficiente do alvo, mudamos para o estado IDLE.
+			# Se estivermos perto o suficiente do alvo...
 			if global_position.distance_to(target_position) < 5:
+				# MUDANÇA AQUI: Antes de parar, avise que o movimento terminou!
+				emit_signal("movement_finished")
 				current_state = State.IDLE
 			else:
 				# Se não, calculamos a velocidade e atualizamos a animação de caminhada.
@@ -60,11 +62,24 @@ func _physics_process(delta):
 	# (seja ela zero, de movimento ou de um futuro efeito de recuo).
 	move_and_slide()
 	
+# Adicione funções para as penalidades
+func lose_power(amount: int):
+	current_power = max(0, current_power - amount)
+	emit_signal("power_changed", current_power)
+	print("Poder perdido! Poder atual: ", current_power)
+	
+# O GameManager chama esta função para mover o jogador
+func move_to_position(new_target: Vector2):
+	# Só aceita o comando se não estiver atacando
+	if current_state != State.ATTACKING:
+		target_position = new_target
+		current_state = State.MOVING
+
 func _input(event):
-	# O jogador só pode receber ordens de movimento durante a EXPLORAÇÃO
-	if game_manager.current_phase == game_manager.GamePhase.EXPLORATION:
+	# A lógica de movimento livre com clique direito SÓ funciona na fase de COMBATE
+	if game_manager.current_phase == game_manager.GamePhase.COMBAT:
 		if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_RIGHT and event.pressed:
-			# O jogador só pode se mover se não estiver atacando (regra antiga, ainda útil)
+			# O resto da lógica interna é a mesma
 			if current_state != State.ATTACKING:
 				target_position = get_global_mouse_position()
 				current_state = State.MOVING
@@ -148,3 +163,4 @@ func _on_animation_player_animation_finished(anim_name: StringName) -> void:
 # Se a animação que terminou foi uma de ataque, libera o jogador
 	if anim_name.begins_with("attack_"):
 		current_state = State.IDLE
+		
