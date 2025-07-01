@@ -7,6 +7,8 @@ extends CanvasLayer
 @export var health_bar: TextureProgressBar
 @export var power_bar: TextureProgressBar
 
+@export var gold_label: Label # Nova variável
+
 func _ready():
 	# Conecta este script aos sinais do jogador
 	   # Adicione uma verificação para evitar que o jogo quebre
@@ -19,7 +21,14 @@ func _ready():
 	
 	power_bar.max_value = player.max_power
 	power_bar.value = player.current_power
+	player.gold_changed.connect(_on_player_gold_changed)
 
+	# Configura o valor inicial
+	gold_label.text = "Ouro: %d" % player.gold
+	
+# Nova função para atualizar o label de ouro
+func _on_player_gold_changed(new_gold_amount):
+	gold_label.text = "Ouro: %d" % new_gold_amount
 # Esta função é chamada quando o sinal 'health_changed' é emitido
 func _on_player_health_changed(current_health):
 	health_bar.value = current_health

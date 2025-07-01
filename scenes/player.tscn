@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3 uid="uid://dail6vphdmcnj"]
+[gd_scene load_steps=18 format=3 uid="uid://dail6vphdmcnj"]
 
 [ext_resource type="Script" path="res://script/player.gd" id="1_xgfj0"]
 [ext_resource type="PackedScene" uid="uid://b86ai6uhdfgat" path="res://scenes/projectile.tscn" id="2_ieqno"]
@@ -10,30 +10,6 @@ height = 28.0
 
 [sub_resource type="Animation" id="Animation_8thed"]
 length = 0.6
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite2D:frame")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [25]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("Sprite2D:flip_h")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [false]
-}
 
 [sub_resource type="Animation" id="Animation_8iftd"]
 resource_name = "attack_down"
@@ -155,6 +131,22 @@ tracks/0/keys = {
 "values": [0, 1, 2, 3, 4, 5]
 }
 
+[sub_resource type="Animation" id="Animation_no7mb"]
+resource_name = "take_hit"
+length = 0.4
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 0.27451, 0, 1), Color(1, 1, 1, 1), Color(1, 0.145098, 0, 1), Color(1, 1, 1, 1)]
+}
+
 [sub_resource type="Animation" id="Animation_uy4ei"]
 resource_name = "walk_down"
 length = 0.5
@@ -255,6 +247,7 @@ _data = {
 "attack_up": SubResource("Animation_db0e8"),
 "died": SubResource("Animation_saoay"),
 "idle": SubResource("Animation_qnmd2"),
+"take_hit": SubResource("Animation_no7mb"),
 "walk_down": SubResource("Animation_uy4ei"),
 "walk_left": SubResource("Animation_oapck"),
 "walk_right": SubResource("Animation_h2wnk"),
@@ -274,7 +267,7 @@ texture = ExtResource("2_lu7ts")
 offset = Vector2(0, -16.9204)
 hframes = 6
 vframes = 10
-frame = 25
+frame = 42
 region_rect = Rect2(60.7223, 160.578, 22.747, 26.988)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]

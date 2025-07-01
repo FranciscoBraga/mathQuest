@@ -12,6 +12,8 @@ signal died
 signal power_changed(current_power)
 signal movement_finished
 
+signal gold_changed(new_gold_amount)
+
 @onready var animation_player = $AnimationPlayer
 @export var projectile_scene: PackedScene
 # Adicione uma referência para o nosso cérebro do jogo
@@ -23,6 +25,7 @@ var max_health = 1000
 var current_power = 0
 var max_power = 100
 var speed = 20
+var gold = 0 # O jogador começa com 0 de ouro
 
 
 var last_direction = Vector2(0, 1)
@@ -97,6 +100,11 @@ func gain_power(amount: int):
 	current_power = min(current_power + amount, max_power) # Garante que o poder não passe do máximo
 	emit_signal("power_changed", current_power)
 
+#função para adicionar ouro
+func add_gold(amount: int):
+	gold += amount
+	emit_signal("gold_changed", gold)
+
 func perform_attack(target_monster: Node2D):
 	# Não permite um novo ataque se já estiver atacando
 	current_state = State.ATTACKING
@@ -158,7 +166,10 @@ func update_animation(direction: Vector2):
 		# Se parado, para na primeira imagem da última direção
 		# (Você pode criar animações de "idle" aqui também)
 		#animation_player.stop()
-
+func play_hit_animation():
+	print("take_hit")
+	animation_player.play("take_hit")
+	
 func _on_animation_player_animation_finished(anim_name: StringName) -> void:
 # Se a animação que terminou foi uma de ataque, libera o jogador
 	if anim_name.begins_with("attack_"):

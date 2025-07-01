@@ -3,6 +3,7 @@
 [ext_resource type="Script" path="res://script/exploration_answer_node.gd" id="1_v2j67"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_g6n2e"]
+size = Vector2(16, 16)
 
 [node name="ExplorationAnswerNode" type="Area2D"]
 script = ExtResource("1_v2j67")

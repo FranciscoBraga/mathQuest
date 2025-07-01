@@ -17,6 +17,7 @@ config/icon="res://icon.svg"
 [autoload]
 
 MathProblem="*res://script/MathProblem.gd"
+SettingsManager="*res://script/SettingsManager.gd"
 
 [display]
 

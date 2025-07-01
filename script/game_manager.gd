@@ -5,9 +5,13 @@ extends Node
 @export var spawn_radius = 500
 @export var game_over_screen: Control
 @export var exploration_answer_scene: PackedScene
+@export var shop_button: Button
+@export var shop_screen: Control
 
 enum GameState { PLAYING, GAME_OVER }
 var current_state = GameState.PLAYING
+
+var correct_streak = 0 # Combo de acertos seguidos
 
 # Definimos os dois principais estados do nosso jogo
 enum GamePhase { EXPLORATION, COMBAT }
@@ -18,8 +22,13 @@ var current_phase = GamePhase.EXPLORATION # O jogo começa na fase de exploraç�
 @export var monster_container: Node2D
 @onready var phase_timer: Timer = $PhaseTimer
 
+
 var active_monsters = []
 var correct_answer = 0
+
+signal gold_changed(new_gold_amount) # Novo sinal
+
+var gold = 0 # O jogador começa com 0 de ouro
 
 # Variável para controlar o tamanho da grade
 var current_phase_number = 1
@@ -45,6 +54,10 @@ func _ready():
 	player.died.connect(_on_player_died)
 	# NOVA CONEXÃO: Ouve quando o jogador termina de se mover
 	player.movement_finished.connect(_on_player_movement_finished)
+	# Conecta os sinais dos novos botões
+	shop_button.pressed.connect(_on_shop_button_pressed)
+	# O caminho para o botão de fechar pode precisar de ajuste
+	shop_screen.get_node("CloseShopButton").pressed.connect(_on_close_shop_button_pressed)
 	
 	game_over_screen.hide()
 	
@@ -57,7 +70,8 @@ func _ready():
 func start_exploration_phase():
 	print("FASE DE EXPLORAÇÃO INICIOU!")
 	current_phase = GamePhase.EXPLORATION
-	
+	shop_button.show() # Mostra o botão da loja na exploração
+
 	# Garante que não há monstros na tela
 	for monster in monster_container.get_children():
 		monster.queue_free()
@@ -72,7 +86,6 @@ func start_exploration_phase():
 	
 # Esta função cria o desafio de movimento que você descreveu
 # wave_manager.gd
-
 func create_exploration_challenge():
 	# Limpa as respostas antigas do chão
 	for answer_node in get_tree().get_nodes_in_group("exploration_answers"):
@@ -144,10 +157,36 @@ func _on_exploration_answer_chosen(value_chosen, position_chosen):
 	player.move_to_position(position_chosen)
 
 	if value_chosen != correct_answer:
-		# Se errou, aplica a penalidade
-		print("Resposta errada! Penalidade aplicada.")
-		player.lose_power(10) # Exemplo de penalidade
+			print("Resposta errada! Penalidade aplicada.")
+			player.lose_power(10)
+			# CHAMA A ANIMAÇÃO DE DANO AQUI!
+			player.play_hit_animation()
+	if value_chosen == correct_answer:
+		# RESPOSTA CORRETA: Aumenta o combo e calcula o ouro
+		correct_streak += 1
+		var gold_to_add = 0
+		if correct_streak >= 7:
+			gold_to_add = 4
+		elif correct_streak >= 5:
+			gold_to_add = 3
+		elif correct_streak >= 3:
+			gold_to_add = 2
+		else:
+			gold_to_add = 1
 		
+		print("Acerto! Combo: ", correct_streak, " | Ouro ganho: ", gold_to_add)
+		player.add_gold(gold_to_add)
+
+		# Manda o jogador se mover
+		player.move_to_position(position_chosen)
+	else:
+		# RESPOSTA ERRADA: Zera o combo e aplica penalidade
+		correct_streak = 0
+		print("Resposta errada! Combo zerado. Penalidade aplicada.")
+		player.lose_power(10)
+		player.play_hit_animation()
+		# Manda o jogador se mover mesmo errando
+		player.move_to_position(position_chosen)
 # NOVA FUNÇÃO: Chamada quando o jogador chega ao destino
 func _on_player_movement_finished():
 	# Só cria um novo desafio se ainda estivermos na fase de exploração
@@ -158,7 +197,7 @@ func _on_player_movement_finished():
 func start_combat_phase():
 	print("FASE DE COMBATE INICIOU!")
 	current_phase = GamePhase.COMBAT
-	
+	shop_button.hide() # Esconde o botão da loja no combate
 		# Limpa qualquer desafio de exploração que ainda esteja na tela
 	for answer_node in get_tree().get_nodes_in_group("exploration_answers"):
 		answer_node.queue_free()
@@ -269,3 +308,16 @@ func _on_player_died():
 
 func _on_restart_button_pressed():
 	get_tree().reload_current_scene()
+	
+# Nova função para adicionar ouro
+func add_gold(amount: int):
+	gold += amount
+	emit_signal("gold_changed", gold)
+# Novas funções para abrir e fechar a loja
+func _on_shop_button_pressed():
+	shop_screen.show()
+	get_tree().paused = true # PAUSA O JOGO!
+
+func _on_close_shop_button_pressed():
+	shop_screen.hide()
+	get_tree().paused = false # DESPAUSA O JOGO!
