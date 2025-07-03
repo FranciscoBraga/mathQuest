@@ -1,0 +1,28 @@
+[gd_scene load_steps=2 format=3 uid="uid://3be03w8n47ua"]
+
+[ext_resource type="Script" path="res://script/shop_screen.gd" id="1_8006d"]
+
+[node name="shopScreen" type="Panel"]
+offset_left = 2.0
+offset_top = -3.0
+offset_right = 719.0
+offset_bottom = 362.0
+script = ExtResource("1_8006d")
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 0
+offset_left = 314.0
+offset_top = 57.0
+offset_right = 389.0
+offset_bottom = 80.0
+text = "Loja Itens
+"
+
+[node name="CloseShopButton" type="Button" parent="."]
+layout_mode = 0
+offset_left = 312.0
+offset_top = 290.0
+offset_right = 372.0
+offset_bottom = 321.0
+text = "Fechar
+"

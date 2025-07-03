@@ -3,10 +3,11 @@ extends Node
 
 @export var enemy_scenes: Array[PackedScene]
 @export var spawn_radius = 500
-@export var game_over_screen: Control
+@export var game_over_screen: Panel
 @export var exploration_answer_scene: PackedScene
 @export var shop_button: Button
 @export var shop_screen: Control
+@export var hud: Control
 
 enum GameState { PLAYING, GAME_OVER }
 var current_state = GameState.PLAYING
@@ -58,7 +59,7 @@ func _ready():
 	shop_button.pressed.connect(_on_shop_button_pressed)
 	# O caminho para o botão de fechar pode precisar de ajuste
 	shop_screen.get_node("CloseShopButton").pressed.connect(_on_close_shop_button_pressed)
-	
+	game_over_screen.restart_game_requested.connect(_on_restart_button_pressed)
 	game_over_screen.hide()
 	
 	# Conecta o sinal do nosso novo timer
