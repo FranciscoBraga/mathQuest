@@ -2,20 +2,29 @@
 extends Panel
 
 # Arraste os nós do editor para estes campos no Inspetor
-@export var volume_slider: HSlider
-@export var difficulty_options: OptionButton
-@export var operations_checkboxes: VBoxContainer # Coloque seus checkboxes dentro de um VBoxContainer
-@export var progressive_check: CheckButton
-@export var random_check: CheckButton
+@onready var volume_slider: HSlider = $HSlider
+@onready var difficulty_options: OptionButton = $OptionButton
+@onready var operations_checkboxes: VBoxContainer  = $VBoxContainer# Coloque seus checkboxes dentro de um VBoxContainer
+@onready var progressive_check: CheckButton = $progressiveCheck 
+@onready var random_check: CheckButton = $randomCheck 
+@onready var close_button: Button = $Fechar
+
+signal close_settings
 
 func _ready():
 	# Conecta os sinais da UI a funções neste script
 	volume_slider.value_changed.connect(_on_volume_changed)
 	difficulty_options.item_selected.connect(_on_difficulty_selected)
-	progressive_check.toggled.connect(_on_progression_mode_toggled)
-	random_check.toggled.connect(_on_progression_mode_toggled)
+# Nós "empacotamos" o nome do modo junto com a conexão.
+	progressive_check.toggled.connect(_on_progression_mode_toggled.bind("Progressivo"))
+	random_check.toggled.connect(_on_progression_mode_toggled.bind("Aleatório"))
+	close_button.pressed.connect(_on_close_button_settings)
+	
+	# Para cada checkbox de operação dentro do container...
 	for checkbox in operations_checkboxes.get_children():
-		checkbox.toggled.connect(_on_operation_toggled)
+		# Conectamos o sinal 'toggled', e usamos .bind() para passar o NOME do próprio checkbox como um argumento extra.
+		checkbox.toggled.connect(_on_operation_toggled.bind(checkbox.name))
+	
 	
 	# Carrega os valores atuais para a UI
 	load_values_to_ui()
@@ -50,13 +59,30 @@ func _on_difficulty_selected(index):
 	validate_operations_for_level()
 	SettingsManager.save_settings()
 	
-func _on_progression_mode_toggled(pressed, button_name):
-	# Lógica para garantir que apenas um seja selecionado
-	# ...
-	SettingsManager.progression_mode = button_name
-	SettingsManager.save_settings()
+# A função agora espera o 'pressed' (bool) do sinal e o 'mode_name' (String) que nós empacotamos com bind.
+func _on_progression_mode_toggled(pressed: bool, mode_name: String):
+	# Nós só queremos agir quando um botão é MARCADO (pressed = true)
+	if pressed:
+		print("Modo de progressão mudou para: ", mode_name)
+		SettingsManager.progression_mode = mode_name
+		
+		# Lógica para garantir que apenas um botão fique marcado (efeito de "radio button")
+		if mode_name == "Progressivo":
+			# Desmarca o outro botão sem causar um loop infinito de sinais,
+			# pois a outra chamada emitirá toggled(false), que será ignorado pelo nosso 'if pressed'.
+			random_check.button_pressed = false
+		else: # Se o modo for "Aleatório"
+			progressive_check.button_pressed = false
+			
+		# Salva a nova configuração
+		SettingsManager.save_settings()
 
-func _on_operation_toggled(pressed, op_name):
+func _on_operation_toggled(pressed: bool, op_name: String):
+	# O nome da operação (ex: "Soma") agora é recebido corretamente.
+	print("Operação '", op_name, "' foi alterada para: ", pressed)
+	
+	# Atualiza o dicionário no nosso gerenciador de configurações.
+	# Usamos to_lower() para garantir consistência (ex: "Soma" vira "soma").
 	SettingsManager.active_operations[op_name.to_lower()] = pressed
 	SettingsManager.save_settings()
 
@@ -66,3 +92,8 @@ func validate_operations_for_level():
 	operations_checkboxes.get_node("Multiplicacao").disabled = level < 2
 	operations_checkboxes.get_node("Divisao").disabled = level < 3
 	# ...
+func _on_close_button_settings():
+	print("close settings")
+	emit_signal("close_settings")
+	
+	

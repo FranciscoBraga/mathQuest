@@ -1,7 +1,0 @@
-[gd_scene load_steps=2 format=3 uid="uid://bbmk3ecut8ba"]
-
-[ext_resource type="Script" path="res://script/game_manager.gd" id="1_7cmpm"]
-
-[node name="WaveManager" type="Node"]
-script = ExtResource("1_7cmpm")
-spawn_radius = 200

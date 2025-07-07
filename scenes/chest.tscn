@@ -1,0 +1,13 @@
+[gd_scene load_steps=3 format=3 uid="uid://b8q26p4spwpi0"]
+
+[ext_resource type="PackedScene" uid="uid://ct2grrvu74yam" path="res://scenes/interactable.tscn" id="1_808kx"]
+[ext_resource type="Texture2D" uid="uid://ql78eiwullvj" path="res://assets/objects/chest_02.png" id="2_5y0g0"]
+
+[node name="Interactable" instance=ExtResource("1_808kx")]
+
+[node name="CollisionShape2D" parent="." index="0"]
+position = Vector2(0, -0.5)
+
+[node name="Sprite2D" type="Sprite2D" parent="." index="1"]
+texture = ExtResource("2_5y0g0")
+hframes = 4

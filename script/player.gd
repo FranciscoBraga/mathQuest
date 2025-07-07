@@ -78,14 +78,13 @@ func move_to_position(new_target: Vector2):
 		target_position = new_target
 		current_state = State.MOVING
 
+# A função _input agora não precisa mais se preocupar com a fase do jogo para o movimento.
 func _input(event):
-	# A lógica de movimento livre com clique direito SÓ funciona na fase de COMBATE
-	if game_manager.current_phase == game_manager.GamePhase.COMBAT:
-		if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_RIGHT and event.pressed:
-			# O resto da lógica interna é a mesma
-			if current_state != State.ATTACKING:
-				target_position = get_global_mouse_position()
-				current_state = State.MOVING
+	# O clique direito SEMPRE define um alvo de movimento, a menos que o jogador esteja no meio de um ataque.
+	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_RIGHT and event.pressed:
+		if current_state != State.ATTACKING:
+			target_position = get_global_mouse_position()
+			current_state = State.MOVING
 
 # Esta função será chamada por um inimigo ou projétil que o atingir
 func take_damage(amount: int):

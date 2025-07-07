@@ -1,15 +1,20 @@
+# shop_screen.gd
 extends Panel
 
+# 1. NOME DO SINAL CORRIGIDO: Um nome simples e claro que descreve a intenção.
+signal close_requested
 
-signal _on_close_shop_button_pressed
+# A referência ao botão está correta.
+@onready var close_shop_button: Button = $CloseShopButton
 
-@onready var button_close_shop : Button = $CloseShopButton
-# Called when the node enters the scene tree for the first time.
-func _ready() -> void:
-	button_close_shop.pressed.connect(close_shop_button_pressed)
+func _ready():
+	# 2. Conecta o sinal "pressed" do botão a uma função DENTRO deste script.
+	#    O nome da função agora segue a convenção da Godot.
+	close_shop_button.pressed.connect(_on_close_button_pressed)
 
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func close_shop_button_pressed(delta: float) -> void:
-	print("_on_close_shop_button_pressed")
-	emit_signal("_on_close_shop_button_pressed")
+# 3. Esta função é chamada pelo botão. Seu único trabalho é emitir o sinal da tela.
+func _on_close_button_pressed():
+	print("Botão de fechar a loja foi pressionado. Emitindo sinal 'close_requested'...")
+	# Emitimos nosso sinal personalizado e bem nomeado.
+	emit_signal("close_requested")
+	

@@ -2,17 +2,13 @@
 
 [ext_resource type="Script" path="res://script/settings_screen.gd" id="1_6xgde"]
 
-[node name="SettingsScreen" type="Panel" node_paths=PackedStringArray("volume_slider", "difficulty_options", "operations_checkboxes", "progressive_check", "random_check")]
+[node name="SettingsScreen" type="Panel"]
 offset_left = 1.0
 offset_top = 2.0
-offset_right = 715.0
-offset_bottom = 355.0
+offset_right = 736.0
+offset_bottom = 372.0
+mouse_filter = 2
 script = ExtResource("1_6xgde")
-volume_slider = NodePath("HSlider")
-difficulty_options = NodePath("OptionButton")
-operations_checkboxes = NodePath("VBoxContainer")
-progressive_check = NodePath("CheckButton")
-random_check = NodePath("CheckButton")
 
 [node name="Volume" type="Label" parent="."]
 layout_mode = 0
@@ -43,8 +39,23 @@ offset_left = 16.0
 offset_top = 167.0
 offset_right = 156.0
 offset_bottom = 187.0
+item_count = 4
+popup/item_0/text = "Aprendiz da Aritmética"
+popup/item_1/text = "Calculista Ágil"
+popup/item_1/id = 1
+popup/item_2/text = "Mestre Multiplicador"
+popup/item_2/id = 2
+popup/item_3/text = "Soberano dos Dígitos"
+popup/item_3/id = 3
 
-[node name="CheckButton" type="CheckButton" parent="."]
+[node name="progressiveCheck" type="CheckButton" parent="."]
+layout_mode = 0
+offset_left = 25.0
+offset_top = 231.0
+offset_right = 69.0
+offset_bottom = 255.0
+
+[node name="randomCheck" type="CheckButton" parent="."]
 layout_mode = 0
 offset_left = 25.0
 offset_top = 231.0
