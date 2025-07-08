@@ -2,7 +2,7 @@
 extends CharacterBody2D
 
 # Definimos os possíveis estados do jogador
-enum State { IDLE, MOVING, ATTACKING }
+enum State { IDLE, MOVING, ATTACKING, HURT }
 var current_state = State.IDLE # O jogador começa no estado "Parado"
 
 
@@ -33,36 +33,25 @@ var target_position: Vector2 # Nova variável para guardar o alvo do clique
 # Substitua seu _physics_process inteiro por este:
 # Substitua seu _physics_process inteiro por este:
 func _physics_process(delta):
-	# Usamos 'match' para tratar cada estado do jogador separadamente
-	match current_state:
-		State.IDLE:
-			# No estado PARADO, garantimos que a velocidade seja zero
-			# e atualizamos para a animação de parado.
-			velocity = Vector2.ZERO
-			update_animation(Vector2.ZERO)
-		
-		State.MOVING:
-			# No estado MOVENDO, executamos toda a lógica de movimento point-and-click.
-			var direction = global_position.direction_to(target_position)
-			# Se estivermos perto o suficiente do alvo...
-			if global_position.distance_to(target_position) < 5:
-				# MUDANÇA AQUI: Antes de parar, avise que o movimento terminou!
-				emit_signal("movement_finished")
-				current_state = State.IDLE
-			else:
-				# Se não, calculamos a velocidade e atualizamos a animação de caminhada.
-				velocity = direction * speed
-				update_animation(direction)
-		
-		State.ATTACKING:
-			# No estado ATACANDO, não fazemos NADA relacionado a movimento aqui.
-			# A velocidade já foi zerada quando o ataque começou.
-			# Apenas esperamos o sinal 'animation_finished' para mudar de estado.
-			pass
+	# Se o jogador estiver atacando ou tomando dano, não permite movimento.
+	if current_state == State.ATTACKING or current_state == State.HURT:
+		velocity = Vector2.ZERO
+		move_and_slide()
+		return
 
-	# A chamada move_and_slide() fica do lado de fora do match,
-	# pois ela deve ser executada sempre para aplicar a 'velocity' atual
-	# (seja ela zero, de movimento ou de um futuro efeito de recuo).
+	# Pega a direção do input do teclado
+	var direction = Input.get_vector("move_left", "move_right", "move_up", "move_down")
+
+	# Define a velocidade baseada na direção
+	if direction.length() > 0:
+		velocity = direction * speed
+		current_state = State.MOVING
+	else:
+		velocity = Vector2.ZERO
+		current_state = State.IDLE
+
+	# Atualiza a animação e move o personagem
+	update_animation(direction)
 	move_and_slide()
 	
 # Adicione funções para as penalidades
@@ -78,22 +67,20 @@ func move_to_position(new_target: Vector2):
 		target_position = new_target
 		current_state = State.MOVING
 
-# A função _input agora não precisa mais se preocupar com a fase do jogo para o movimento.
-func _input(event):
-	# O clique direito SEMPRE define um alvo de movimento, a menos que o jogador esteja no meio de um ataque.
-	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_RIGHT and event.pressed:
-		if current_state != State.ATTACKING:
-			target_position = get_global_mouse_position()
-			current_state = State.MOVING
-
 # Esta função será chamada por um inimigo ou projétil que o atingir
 func take_damage(amount: int):
+	if current_state == State.HURT: return # Evita tomar dano várias vezes seguidas
+
 	health -= amount
 	emit_signal("health_changed", health)
+	
+	# CHAMA A ANIMAÇÃO DE DANO AQUI!
+	play_hit_animation()
+	
 	if health <= 0:
 		emit_signal("died")
-		hide() # Apenas esconde o sprite do jogador
-		get_node("CollisionShape2D").set_deferred("disabled", true) # Desativa a colisão de forma segura
+		hide()
+		get_node("CollisionShape2D").set_deferred("disabled", true)
 		
 func gain_power(amount: int):
 	current_power = min(current_power + amount, max_power) # Garante que o poder não passe do máximo
@@ -167,10 +154,12 @@ func update_animation(direction: Vector2):
 		#animation_player.stop()
 func play_hit_animation():
 	print("take_hit")
+	current_state = State.HURT # Trava o jogador no estado de "dano"
 	animation_player.play("take_hit")
 	
 func _on_animation_player_animation_finished(anim_name: StringName) -> void:
-# Se a animação que terminou foi uma de ataque, libera o jogador
-	if anim_name.begins_with("attack_"):
+	# Se a animação que terminou foi uma de ataque ou de tomar dano...
+	if anim_name.begins_with("attack_") or anim_name == "take_hit":
+		# ...libera o jogador, voltando ao estado IDLE.
 		current_state = State.IDLE
 		

@@ -7,5 +7,3 @@ script = ExtResource("1_7cmpm")
 
 [node name="SpawnTimer" type="Timer" parent="."]
 autostart = true
-
-[connection signal="timeout" from="SpawnTimer" to="." method="_on_spawn_timer_timeout"]

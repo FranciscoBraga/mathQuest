@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=4 uid="uid://blt6em0ysw7wu"]
+[gd_scene load_steps=13 format=4 uid="uid://blt6em0ysw7wu"]
 
 [ext_resource type="PackedScene" uid="uid://dail6vphdmcnj" path="res://scenes/player.tscn" id="1_duvbp"]
 [ext_resource type="PackedScene" uid="uid://bbmk3ecut8ba" path="res://scenes/GameManager.tscn" id="3_ksm5r"]
@@ -6,7 +6,6 @@
 [ext_resource type="PackedScene" uid="uid://b47yrtlquuv0l" path="res://scenes/enemy.tscn" id="4_ua8pv"]
 [ext_resource type="PackedScene" uid="uid://v4xeh5r3m16v" path="res://scenes/game_over_screen.tscn" id="5_0byuy"]
 [ext_resource type="PackedScene" uid="uid://c3nucyg0de0ev" path="res://scenes/hdu.tscn" id="5_kfq7w"]
-[ext_resource type="PackedScene" uid="uid://rsodt43dgi28" path="res://scenes/interaction_puzzle_ui.tscn" id="6_0jucp"]
 [ext_resource type="PackedScene" uid="uid://7dspih0peyjw" path="res://scenes/settings_screen.tscn" id="6_376tb"]
 [ext_resource type="Texture2D" uid="uid://dgntji2nafmn5" path="res://assets/tilesets/plains.png" id="7_xu10e"]
 [ext_resource type="PackedScene" uid="uid://b8q26p4spwpi0" path="res://scenes/chest.tscn" id="11_gwjd1"]
@@ -128,19 +127,19 @@ metadata/_edit_use_anchors_ = true
 
 [node name="shopButton" type="Button" parent="CanvasLayer/Control"]
 layout_mode = 0
-offset_left = 459.0
-offset_top = 211.0
-offset_right = 500.0
-offset_bottom = 242.0
+offset_left = 668.0
+offset_top = 278.0
+offset_right = 709.0
+offset_bottom = 309.0
 text = "Loja
 "
 
 [node name="configButton" type="Button" parent="CanvasLayer/Control"]
 layout_mode = 0
-offset_left = 413.0
-offset_top = 266.0
-offset_right = 538.0
-offset_bottom = 297.0
+offset_left = 584.0
+offset_top = 323.0
+offset_right = 709.0
+offset_bottom = 354.0
 text = "Configurações
 "
 
@@ -168,14 +167,7 @@ offset_top = 5.0
 offset_right = 731.0
 offset_bottom = 420.0
 
-[node name="InteractionPuzzleUI" parent="CanvasLayer" instance=ExtResource("6_0jucp")]
-visible = false
-offset_left = 87.0
-offset_top = 63.0
-offset_right = 127.0
-offset_bottom = 103.0
-
-[node name="GameManager" parent="." node_paths=PackedStringArray("player", "monster_container", "question_label", "hud", "shop_button", "config_button", "game_over_screen", "shop_screen", "settings_screen", "interaction_puzzle_ui") instance=ExtResource("3_ksm5r")]
+[node name="GameManager" parent="." node_paths=PackedStringArray("player", "monster_container", "question_label", "hud", "shop_button", "config_button", "game_over_screen", "shop_screen", "settings_screen") instance=ExtResource("3_ksm5r")]
 player = NodePath("../player")
 monster_container = NodePath("../MonsterContainer")
 enemy_scenes = Array[PackedScene]([ExtResource("4_ua8pv")])
@@ -186,7 +178,6 @@ config_button = NodePath("../CanvasLayer/Control/configButton")
 game_over_screen = NodePath("../CanvasLayer/GameOverScreen")
 shop_screen = NodePath("../CanvasLayer/shopScreen")
 settings_screen = NodePath("../CanvasLayer/SettingsScreen")
-interaction_puzzle_ui = NodePath("../CanvasLayer/InteractionPuzzleUI")
 
 [node name="player" parent="." node_paths=PackedStringArray("game_manager") groups=["player"] instance=ExtResource("1_duvbp")]
 position = Vector2(318, 177)
@@ -195,14 +186,14 @@ game_manager = NodePath("../GameManager")
 [node name="MonsterContainer" type="Node2D" parent="."]
 position = Vector2(1, -2)
 
-[node name="Interactable" parent="." instance=ExtResource("11_gwjd1")]
+[node name="Interactable" parent="." groups=["interactables"] instance=ExtResource("11_gwjd1")]
 position = Vector2(210, 169)
 
-[node name="Interactable2" parent="." instance=ExtResource("11_gwjd1")]
+[node name="Interactable2" parent="." groups=["interactables"] instance=ExtResource("11_gwjd1")]
 position = Vector2(431, 112)
 
-[node name="Interactable3" parent="." instance=ExtResource("11_gwjd1")]
-position = Vector2(580, 255)
+[node name="Interactable3" parent="." groups=["interactables"] instance=ExtResource("11_gwjd1")]
+position = Vector2(561, 241)
 
-[node name="Interactable4" parent="." instance=ExtResource("11_gwjd1")]
+[node name="Interactable4" parent="." groups=["interactables"] instance=ExtResource("11_gwjd1")]
 position = Vector2(637, 94)
