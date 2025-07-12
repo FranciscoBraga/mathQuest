@@ -1,0 +1,49 @@
+[gd_scene load_steps=5 format=3 uid="uid://bd4ujo7e8qt43"]
+
+[ext_resource type="Script" path="res://script/shop_item_slot.gd" id="1_472ru"]
+[ext_resource type="Texture2D" uid="uid://cj7bbji24aoio" path="res://assets/objects/rock_in_water_05.png" id="2_8tgu3"]
+[ext_resource type="Texture2D" uid="uid://bti2j10vb5v1a" path="res://assets/objects/rock_in_water_04.png" id="3_ahgug"]
+[ext_resource type="Texture2D" uid="uid://iykcwft7efyp" path="res://assets/objects/rock_in_water_06.png" id="4_qvlgg"]
+
+[node name="ShopItemSlot" type="PanelContainer"]
+custom_minimum_size = Vector2(300, 100)
+offset_right = 316.0
+offset_bottom = 132.0
+script = ExtResource("1_472ru")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="ItemImage" type="TextureRect" parent="HBoxContainer"]
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+texture = ExtResource("2_8tgu3")
+expand_mode = 3
+
+[node name="TextInfo" type="VBoxContainer" parent="HBoxContainer"]
+layout_mode = 2
+
+[node name="ItemNameLabel" type="Label" parent="HBoxContainer/TextInfo"]
+layout_mode = 2
+text = "item1"
+
+[node name="ItemDescriptionLabel" type="Label" parent="HBoxContainer/TextInfo"]
+layout_mode = 2
+text = "poderes além da imaginação"
+
+[node name="CostContainer" type="HBoxContainer" parent="HBoxContainer/TextInfo"]
+layout_mode = 2
+
+[node name="GoldIcon" type="TextureRect" parent="HBoxContainer/TextInfo/CostContainer"]
+layout_mode = 2
+texture = ExtResource("3_ahgug")
+
+[node name="ItemCostLabel" type="Label" parent="HBoxContainer/TextInfo/CostContainer"]
+layout_mode = 2
+text = "poderes de fogo"
+
+[node name="BuyButton" type="Button" parent="HBoxContainer/TextInfo"]
+layout_mode = 2
+text = "Comprar"
+icon = ExtResource("4_qvlgg")

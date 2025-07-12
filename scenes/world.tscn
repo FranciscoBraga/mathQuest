@@ -1,13 +1,17 @@
-[gd_scene load_steps=13 format=4 uid="uid://blt6em0ysw7wu"]
+[gd_scene load_steps=17 format=4 uid="uid://blt6em0ysw7wu"]
 
 [ext_resource type="PackedScene" uid="uid://dail6vphdmcnj" path="res://scenes/player.tscn" id="1_duvbp"]
 [ext_resource type="PackedScene" uid="uid://bbmk3ecut8ba" path="res://scenes/GameManager.tscn" id="3_ksm5r"]
 [ext_resource type="PackedScene" uid="uid://3be03w8n47ua" path="res://scenes/shop_screen.tscn" id="3_yfa8n"]
+[ext_resource type="Script" path="res://script/ShopItemData.gd" id="4_hd58u"]
 [ext_resource type="PackedScene" uid="uid://b47yrtlquuv0l" path="res://scenes/enemy.tscn" id="4_ua8pv"]
 [ext_resource type="PackedScene" uid="uid://v4xeh5r3m16v" path="res://scenes/game_over_screen.tscn" id="5_0byuy"]
 [ext_resource type="PackedScene" uid="uid://c3nucyg0de0ev" path="res://scenes/hdu.tscn" id="5_kfq7w"]
+[ext_resource type="Resource" uid="uid://bdebwhumdtc4t" path="res://script/resource/botas.tres" id="5_y70dk"]
 [ext_resource type="PackedScene" uid="uid://7dspih0peyjw" path="res://scenes/settings_screen.tscn" id="6_376tb"]
+[ext_resource type="Resource" uid="uid://bq6srb4udmtrx" path="res://script/resource/botas2.tres" id="6_qac4k"]
 [ext_resource type="Texture2D" uid="uid://dgntji2nafmn5" path="res://assets/tilesets/plains.png" id="7_xu10e"]
+[ext_resource type="PackedScene" uid="uid://rsodt43dgi28" path="res://scenes/interaction_puzzle_ui.tscn" id="10_n3ckk"]
 [ext_resource type="PackedScene" uid="uid://b8q26p4spwpi0" path="res://scenes/chest.tscn" id="11_gwjd1"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_55aua"]
@@ -105,7 +109,7 @@ layout_mode = 3
 anchors_preset = 0
 offset_left = 4.0
 offset_top = 4.0
-offset_right = 677.0
+offset_right = 717.0
 offset_bottom = 358.0
 mouse_filter = 2
 
@@ -143,12 +147,21 @@ offset_bottom = 354.0
 text = "Configurações
 "
 
-[node name="shopScreen" parent="CanvasLayer" instance=ExtResource("3_yfa8n")]
+[node name="InteractionPuzzleUI" parent="CanvasLayer" instance=ExtResource("10_n3ckk")]
 visible = false
-offset_left = -51.0
+offset_left = -2.0
+offset_top = 5.0
+offset_right = 38.0
+offset_bottom = 45.0
+
+[node name="shopScreen" parent="CanvasLayer" node_paths=PackedStringArray("puzzle_ui") instance=ExtResource("3_yfa8n")]
+visible = false
+offset_left = 2.0
 offset_top = 2.0
-offset_right = 737.0
+offset_right = 721.0
 offset_bottom = 391.0
+puzzle_ui = NodePath("../InteractionPuzzleUI")
+items_for_sale = Array[ExtResource("4_hd58u")]([ExtResource("5_y70dk"), ExtResource("6_qac4k")])
 
 [node name="GameOverScreen" parent="CanvasLayer" instance=ExtResource("5_0byuy")]
 visible = false

@@ -1,29 +1,45 @@
-[gd_scene load_steps=2 format=3 uid="uid://3be03w8n47ua"]
+[gd_scene load_steps=4 format=3 uid="uid://3be03w8n47ua"]
 
 [ext_resource type="Script" path="res://script/shop_screen.gd" id="1_8006d"]
+[ext_resource type="Script" path="res://script/ShopItemData.gd" id="2_nsbmg"]
+[ext_resource type="Resource" uid="uid://bdebwhumdtc4t" path="res://script/resource/botas.tres" id="3_cb3p0"]
 
 [node name="shopScreen" type="Panel"]
-offset_left = 2.0
+process_mode = 3
+offset_left = 23.0
 offset_top = -3.0
 offset_right = 719.0
 offset_bottom = 362.0
 mouse_filter = 2
 script = ExtResource("1_8006d")
+items_for_sale = Array[ExtResource("2_nsbmg")]([ExtResource("3_cb3p0"), ExtResource("3_cb3p0")])
 
-[node name="Label" type="Label" parent="."]
+[node name="GoldLabel" type="Label" parent="." groups=["ui_elements"]]
+unique_name_in_owner = true
 layout_mode = 0
-offset_left = 314.0
-offset_top = 57.0
-offset_right = 389.0
-offset_bottom = 80.0
+offset_left = 535.0
+offset_top = 26.0
+offset_right = 610.0
+offset_bottom = 49.0
 text = "Loja Itens
 "
 
 [node name="CloseShopButton" type="Button" parent="."]
 layout_mode = 0
-offset_left = 312.0
-offset_top = 290.0
-offset_right = 372.0
-offset_bottom = 321.0
+offset_left = 295.0
+offset_top = 328.0
+offset_right = 355.0
+offset_bottom = 359.0
 text = "Fechar
 "
+
+[node name="ScrollContainer" type="ScrollContainer" parent="."]
+layout_mode = 0
+offset_left = 3.0
+offset_top = 5.0
+offset_right = 694.0
+offset_bottom = 361.0
+
+[node name="ItemListContainer" type="VBoxContainer" parent="ScrollContainer"]
+unique_name_in_owner = true
+layout_mode = 2

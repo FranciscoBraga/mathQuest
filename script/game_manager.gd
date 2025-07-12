@@ -54,7 +54,7 @@ func _ready():
 	settings_screen.close_settings.connect(_on_close_button_settings)
 	game_over_screen.restart_game_requested.connect(_on_restart_button_pressed)
 	
-	
+	shop_screen.item_purchased.connect(_on_item_purchased)
 	spawn_timer.timeout.connect(_on_spawn_timer_timeout)
 	
 	# Esconde as telas que não devem começar visíveis
@@ -180,6 +180,7 @@ func _on_shop_button_pressed():
 	get_tree().paused = true
 
 func _on_close_shop_button_pressed():
+	print("fechar  _on_close_shop_button_pressed")
 	shop_screen.hide()
 	get_tree().paused = false
 	current_state = GameState.PLAYING
@@ -212,3 +213,14 @@ func _on_interaction_succeeded(type, amount):
 func _on_interaction_failed():
 	player.lose_power(10)
 	player.play_hit_animation()
+
+func _on_item_purchased(item_data: ShopItemData):
+	# Remove o ouro do jogador
+	player.add_gold(-item_data.cost)
+	
+	# Aplica o bônus do atributo (a lógica exata pode variar)
+	# Ex: player.speed += item_data.attribute_value
+	print("Item '", item_data.item_name, "' foi adicionado ao inventário!")
+
+	# Atualiza a loja para remover o item comprado (opcional)
+	# shop_screen.remove_item(item_data)

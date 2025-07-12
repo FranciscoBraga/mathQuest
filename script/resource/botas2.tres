@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="ShopItemData" load_steps=3 format=3 uid="uid://bq6srb4udmtrx"]
+
+[ext_resource type="Texture2D" uid="uid://iykcwft7efyp" path="res://assets/objects/rock_in_water_06.png" id="1_yxttj"]
+[ext_resource type="Script" path="res://script/ShopItemData.gd" id="2_xundt"]
+
+[resource]
+script = ExtResource("2_xundt")
+item_name = "Item Misterioso"
+item_description = "Descrição do item. botas 2"
+item_image = ExtResource("1_yxttj")
+cost = 20
+attribute_bonus = "Poder Máximo"
+attribute_value = 10.0
