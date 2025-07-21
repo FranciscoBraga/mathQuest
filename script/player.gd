@@ -33,6 +33,10 @@ var target_position: Vector2 # Nova variável para guardar o alvo do clique
 # Substitua seu _physics_process inteiro por este:
 # Substitua seu _physics_process inteiro por este:
 func _physics_process(delta):
+		# Carrega os dados persistentes no início de cada fase
+	var health = SettingsManager.health
+	var power = SettingsManager.power
+	gold = SettingsManager.gold
 	# Se o jogador estiver atacando ou tomando dano, não permite movimento.
 	if current_state == State.ATTACKING or current_state == State.HURT:
 		velocity = Vector2.ZERO

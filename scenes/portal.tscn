@@ -1,0 +1,9 @@
+[gd_scene load_steps=3 format=3 uid="uid://bv5fp6jn47vmm"]
+
+[ext_resource type="PackedScene" uid="uid://ct2grrvu74yam" path="res://scenes/interactable.tscn" id="1_hwhdy"]
+[ext_resource type="Texture2D" uid="uid://x8eqi8vl7ij0" path="res://assets/objects/rock_in_water_01.png" id="2_jwftu"]
+
+[node name="Portal" instance=ExtResource("1_hwhdy")]
+
+[node name="Sprite2D" parent="." index="1"]
+texture = ExtResource("2_jwftu")

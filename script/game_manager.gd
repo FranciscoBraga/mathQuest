@@ -5,6 +5,7 @@ extends Node
 @export var player: CharacterBody2D
 @export var monster_container: Node2D
 @export var enemy_scenes: Array[PackedScene] # Sua lista de inimigos
+@export var portal_scene: PackedScene 
 
 # UI Geral
 @export var question_label: Label
@@ -24,6 +25,17 @@ var threat_level = 0.0 # Ameaça atual, de 0 em diante
 
 @onready var spawn_timer: Timer = $SpawnTimer
 
+@export_category("Balanço da Fase")
+# O número máximo de inimigos permitidos na tela ao mesmo tempo. Essencial para controle e performance.
+@export var max_active_monsters: int = 20
+# O tempo inicial em segundos entre o spawn de cada inimigo. Um número maior = mais fácil.
+@export var initial_spawn_cooldown: float = 4.0
+# Quão rápido a "barra de ameaça" invisível sobe. Um número maior = dificuldade aumenta mais rápido.
+@export var threat_rate_per_second: float = 0.5
+# Um multiplicador que define o quão mais rápido os inimigos aparecem conforme a ameaça aumenta.
+@export var threat_scaling_factor: float = 0.05
+
+
 # --- VARIÁVEIS DE ESTADO E JOGO ---
 enum GameState { PLAYING, GAME_OVER, PAUSED } # Simplificado
 var current_state = GameState.PLAYING
@@ -35,7 +47,13 @@ var correct_answer = 0
 var current_phase_number = 1 # Controla o nível de dificuldade atual (1 a 21)
 var is_combat_puzzle_active = false
 
+@export var next_level_path: String = "res://levels/level_2.tscn"
+var level_duration = 180.0 # 3 minutos em segundos
+var level_timer = 0.0
+
 func _ready():
+	
+	
 	# Pega todos os nós que estão no grupo "interactables"
 	var interactable_nodes = get_tree().get_nodes_in_group("interactables")
 	for interactable in interactable_nodes:
@@ -64,6 +82,8 @@ func _ready():
 	
 	# A pergunta de combate só aparece quando um inimigo é clicado
 	question_label.hide()
+		# Garante que o timer inicial comece com o valor que definimos
+	spawn_timer.wait_time = initial_spawn_cooldown
 
 func _process(delta: float) -> void:
 	# O jogo só progride se estiver no estado PLAYING
@@ -77,12 +97,24 @@ func _process(delta: float) -> void:
 	# Quanto maior a ameaça, menor o tempo de espera para o próximo inimigo
 	var current_spawn_cooldown = max(0.5, spawn_base_cooldown - (threat_level * 0.05))
 	spawn_timer.wait_time = current_spawn_cooldown
+	
+	level_timer += delta
+	if level_timer >= level_duration:
+		# Lógica para spawnar o Guardião da Fase
+		# E para de contar o tempo
+		set_process(false) # Exemplo de como parar o timer
+
 
 func _on_spawn_timer_timeout():
 	print("0 estado",current_state)
 	if current_state != GameState.PLAYING:
 		return
 	print("10 inimigos",enemy_scenes.is_empty())
+	
+	# Se já atingimos o número máximo de inimigos na tela, simplesmente não cria um novo.
+	if active_monsters.size() >= max_active_monsters:
+		return # Para aqui, esperando o jogador limpar a tela um pouco.
+	
 	if enemy_scenes.is_empty(): return
 	
 	# Pega um inimigo aleatório da lista
@@ -126,7 +158,6 @@ func create_combat_challenge():
 		is_combat_puzzle_active = false
 		return
 	
-	
 	# 1. Pede ao gerador um problema com o número exato de respostas erradas que precisamos
 	# (uma a menos que o total de monstros vivos).
 	var num_monsters = active_monsters.size()
@@ -154,6 +185,31 @@ func create_combat_challenge():
 	is_combat_puzzle_active = true
 # Chamado pelo SpawnTimer para criar inimigos gradualmente
 
+# O Guardião, ao morrer, chama esta função
+func on_guardian_defeated(guardian_position):
+	# Garante que temos uma cena de portal configurada
+	if not portal_scene:
+		print("ERRO: Cena do portal não configurada no GameManager!")
+		return
+
+	# 1. Cria o portal usando a variável de export correta
+	var portal = portal_scene.instantiate()
+	portal.global_position = guardian_position
+	
+	# 2. Conecta o sinal do portal à nossa nova função
+	portal.interaction_requested.connect(_on_portal_entered)
+	
+	# Adiciona o portal à cena
+	add_child(portal)
+
+# O portal, ao ser tocado, chama esta função
+func on_portal_entered():
+	# LÓGICA DE TRANSIÇÃO
+	# Salva os dados importantes primeiro!
+	SettingsManager.save_settings()
+	# Muda para a próxima cena
+	get_tree().change_scene_to_file(next_level_path)
+	
 # A lógica de clicar no monstro agora mostra a pergunta
 func _on_monster_clicked(monster: CharacterBody2D):
 	if not is_combat_puzzle_active: return
@@ -224,3 +280,10 @@ func _on_item_purchased(item_data: ShopItemData):
 
 	# Atualiza a loja para remover o item comprado (opcional)
 	# shop_screen.remove_item(item_data)
+	# Função chamada quando o jogador interage com o portal
+func _on_portal_entered():
+	print("Portal ativado! Transicionando para o próximo nível...")
+	# Salva os dados do jogador antes de mudar de cena
+	SettingsManager.save_settings() 
+	# Muda para a cena definida na variável next_level_path
+	get_tree().change_scene_to_file(next_level_path)

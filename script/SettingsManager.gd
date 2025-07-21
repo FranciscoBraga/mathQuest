@@ -8,6 +8,9 @@ var volume_db = 0.0
 var difficulty_level = 1 # 1-Fácil, 2-Médio, etc.
 var progression_mode = "Progressivo" # "Progressivo" ou "Aleatório"
 var active_operations = {"soma": true, "subtracao": true, "multiplicacao": false, "divisao": false}
+var health = 0
+var power = 0
+var gold = 0
 
 func _ready():
 	load_settings()
@@ -18,6 +21,9 @@ func save_settings():
 	config.set_value("game", "difficulty", difficulty_level)
 	config.set_value("game", "progression_mode", progression_mode)
 	config.set_value("game", "operations", active_operations)
+	config.set_value("player","health",health)
+	config.set_value("player","power",power)
+	config.set_value("player","gold",gold)
 	config.save(SAVE_PATH)
 	print("Configurações salvas!")
 

@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=3 uid="uid://cslkhy6bps4us"]
+
+[ext_resource type="PackedScene" uid="uid://blt6em0ysw7wu" path="res://scenes/world.tscn" id="1_n1pth"]
+
+[node name="world" instance=ExtResource("1_n1pth")]
+
+[node name="GameManager" parent="." index="2"]
+max_active_monsters = 15
+initial_spawn_cooldown = 5.0
+threat_rate_per_second = 0.3
