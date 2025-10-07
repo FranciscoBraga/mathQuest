@@ -193,9 +193,6 @@ config_button = NodePath("../CanvasLayer/Control/configButton")
 game_over_screen = NodePath("../CanvasLayer/GameOverScreen")
 shop_screen = NodePath("../CanvasLayer/shopScreen")
 settings_screen = NodePath("../CanvasLayer/SettingsScreen")
-threat_rate = 0.5
-spawn_base_cooldown = 4.0
-next_level_path = "res://levels/level_2.tscn"
 
 [node name="player" parent="." node_paths=PackedStringArray("game_manager") groups=["player"] instance=ExtResource("1_duvbp")]
 position = Vector2(318, 177)
